@@ -12,8 +12,11 @@ TARGET = Polygon
 TEMPLATE = app
 
 SOURCES += main.cpp \
-		   mainwindow.cpp
+		   MainWindow.cpp \
+		   Scene.cpp
 
-HEADERS  += mainwindow.h
 
-FORMS    += mainwindow.ui
+HEADERS  += MainWindow.h \
+			Scene.h
+
+FORMS    += MainWindow.ui

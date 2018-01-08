@@ -6,14 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
-    <height>326</height>
+    <width>624</width>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Polygon</string>
   </property>
   <widget class="QWidget" name="mp_widget">
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="2">
      <widget class="QPushButton" name="mp_button_complete">
@@ -46,11 +49,33 @@
      </spacer>
     </item>
     <item row="1" column="1" colspan="3">
-     <widget class="QGraphicsView" name="mp_graphics_view"/>
+     <widget class="QGraphicsView" name="mp_graphics_view">
+      <property name="cursor" stdset="0">
+       <cursorShape>CrossCursor</cursorShape>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="sceneRect">
+       <rectf>
+        <x>0.000000000000000</x>
+        <y>0.000000000000000</y>
+        <width>500.000000000000000</width>
+        <height>200.000000000000000</height>
+       </rectf>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="mp_status_bar"/>
+  <widget class="QStatusBar" name="mp_status_bar">
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+  </widget>
   <action name="actionOp">
    <property name="text">
     <string>Op</string>
