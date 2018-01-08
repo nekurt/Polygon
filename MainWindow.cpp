@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
 	mp_scene = std::make_shared<Scene>(this);
 
 	mp_ui->mp_graphics_view->setScene(mp_scene.get());
+
+	connect(mp_ui->mp_button_reset, &QPushButton::pressed, mp_scene.get(), &Scene::Reset);
 }
 
 MainWindow::~MainWindow()

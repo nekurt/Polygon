@@ -14,6 +14,13 @@ Scene::Scene(Delegate* ip_delegate)
 {
 }
 
+void Scene::Reset()
+{
+	m_points.clear();
+	clear();
+	mp_connection_line = nullptr;
+}
+
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent* ip_event)
 {
 	const QPointF mouse_position = ip_event->scenePos();
