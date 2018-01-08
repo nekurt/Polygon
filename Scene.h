@@ -31,5 +31,7 @@ protected:
 private:
 	Delegate* mp_delegate;
 	
-	std::vector<QPoint> m_points;	
+	std::vector<QPointF> m_points;
+	
+	QGraphicsLineItem* mp_connection_line = nullptr;
 };
