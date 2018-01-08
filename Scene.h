@@ -30,4 +30,6 @@ protected:
 	
 private:
 	Delegate* mp_delegate;
+	
+	std::vector<QPoint> m_points;	
 };
