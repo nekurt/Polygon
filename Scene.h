@@ -33,5 +33,5 @@ private:
 	
 	std::vector<QPointF> m_points;
 	
-	QGraphicsLineItem* mp_connection_line = nullptr;
+	QGraphicsLineItem* mp_next_connection_line = nullptr;
 };
