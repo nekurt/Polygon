@@ -28,10 +28,14 @@ protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent* ip_event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent* ip_event) override;
 	
+	bool _LinesHaveCollisions();
+	
 private:
 	Delegate* mp_delegate;
 	
 	std::vector<QPointF> m_points;
+	std::vector<QGraphicsLineItem*> m_lines;
 	
 	QGraphicsLineItem* mp_next_connection_line = nullptr;
+	QGraphicsLineItem* mp_last_connection_line = nullptr;
 };
