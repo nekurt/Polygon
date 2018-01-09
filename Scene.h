@@ -14,7 +14,8 @@ public:
 	class Delegate
 	{
 	public:
-		virtual void onMouseMove(const QGraphicsSceneMouseEvent* ip_event) = 0;
+		virtual void OnMouseMove(const QGraphicsSceneMouseEvent* ip_event) = 0;
+		virtual void OnPointsCountChanged(int i_count) = 0;
 	};
 	
 	explicit Scene(Delegate* ip_delegate = nullptr);

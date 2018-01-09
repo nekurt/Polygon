@@ -17,7 +17,8 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
-	void onMouseMove(const QGraphicsSceneMouseEvent* ip_event) override;
+	void OnMouseMove(const QGraphicsSceneMouseEvent* ip_event) override;
+	void OnPointsCountChanged(int i_count) override;
 		
 private:
 	Ui::MainWindow* mp_ui;

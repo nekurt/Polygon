@@ -5,6 +5,8 @@
 
 namespace
 {
+	const int cMinimumPolygonVertexCount = 3;
+	
 	const double cPointSize = 4.0;
 	const QBrush cPointBrush = QBrush(Qt::black);
 
@@ -24,6 +26,11 @@ Scene::Scene(Delegate* ip_delegate)
 {
 }
 
+bool Scene::IsPossibleToComplete()
+{
+	return m_points.size() >= cMinimumPolygonVertexCount;
+}
+
 void Scene::Reset()
 {
 	clear();
@@ -33,6 +40,9 @@ void Scene::Reset()
 	
 	mp_next_connection_line = nullptr;
 	mp_last_connection_line = nullptr;
+	
+	if (mp_delegate)
+		mp_delegate->OnPointsCountChanged(m_points.size());
 }
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent* ip_event)
@@ -61,12 +71,15 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent* ip_event)
 		m_lines.push_back(addLine(QLineF(m_points.back(), mouse_position), cLineSolidBlackPen));
 	
 	m_points.push_back(mouse_position);
+	
+	if (mp_delegate)
+		mp_delegate->OnPointsCountChanged(m_points.size());
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *ip_event)
 {
 	if (mp_delegate)
-		mp_delegate->onMouseMove(ip_event);
+		mp_delegate->OnMouseMove(ip_event);
 
 	if (!mp_next_connection_line)
 		return;

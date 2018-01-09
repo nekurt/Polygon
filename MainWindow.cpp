@@ -23,7 +23,7 @@ MainWindow::~MainWindow()
 	delete mp_ui;
 }
 
-void MainWindow::onMouseMove(const QGraphicsSceneMouseEvent* ip_event)
+void MainWindow::OnMouseMove(const QGraphicsSceneMouseEvent* ip_event)
 {
 	QPointF mouse_position_on_scene = ip_event->scenePos();
 	
@@ -31,3 +31,9 @@ void MainWindow::onMouseMove(const QGraphicsSceneMouseEvent* ip_event)
 	
 	mp_ui->mp_status_bar->showMessage(message);
 }
+
+void MainWindow::OnPointsCountChanged(int)
+{
+	mp_ui->mp_button_complete->setEnabled(mp_scene->IsPossibleToComplete());
+}
+
