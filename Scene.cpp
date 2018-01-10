@@ -24,7 +24,7 @@ namespace
 	
 	double _CalculateAreaOf(const QPolygonF& i_polygon)
 	{
-		Q_ASSERT(i_polygon.size() >= 3);
+		Q_ASSERT(i_polygon.size() >= cMinimumPolygonVertexCount);
 		
 		double area = 0.0;
 		for (int i = 0; i < i_polygon.size(); ++i)
@@ -42,7 +42,7 @@ namespace
 	
 	bool _IsConvex(const QPolygonF& i_polygon)
 	{
-		Q_ASSERT(i_polygon.size() >= 3);
+		Q_ASSERT(i_polygon.size() >= cMinimumPolygonVertexCount);
 		
 		bool is_first_product_positive = true;
 		
