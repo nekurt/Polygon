@@ -7,8 +7,8 @@ class Scene : public QGraphicsScene
 public:
 	struct Result
 	{
-		double m_square;
-		bool m_isConvex;
+		double m_square = 0.0;
+		bool m_is_convex = false;
 	};
 	
 	class Delegate
@@ -34,7 +34,7 @@ protected:
 private:
 	Delegate* mp_delegate;
 	
-	std::vector<QPointF> m_points;
+	QPolygonF m_polygon;
 	std::vector<QGraphicsLineItem*> m_lines;
 	
 	QGraphicsLineItem* mp_next_connection_line = nullptr;

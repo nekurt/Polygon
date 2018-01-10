@@ -9,6 +9,8 @@ namespace
 	
 	const double cPointSize = 4.0;
 	const QBrush cPointBrush = QBrush(Qt::black);
+	
+	const QBrush cPolygonBrush = QBrush(Qt::green);
 
 	const double cLineWidth = 2.0;
 	
@@ -19,6 +21,57 @@ namespace
 	const QPen cLineDashGreenPen = QPen(QBrush(Qt::green), cLineWidth, Qt::DashLine);
 	const QPen cLineDashRedPen = QPen(QBrush(Qt::red), cLineWidth, Qt::DashLine);
 	const QPen cLineDashBlackPen = QPen(QBrush(Qt::black), cLineWidth, Qt::DashLine);
+	
+	double _CalculateAreaOf(const QPolygonF& i_polygon)
+	{
+		Q_ASSERT(i_polygon.size() >= 3);
+		
+		double area = 0.0;
+		for (int i = 0; i < i_polygon.size(); ++i)
+		{
+			const QPointF& current_point = i_polygon[i];
+
+			bool is_last_point = i == i_polygon.size() - 1;
+			const QPointF& next_point = is_last_point ? i_polygon[0] : i_polygon[i + 1];
+
+			area += (next_point.x() * current_point.y() - next_point.y() * current_point.x()) / 2;
+		}
+
+		return qAbs(area);
+	}
+	
+	bool _IsConvex(const QPolygonF& i_polygon)
+	{
+		Q_ASSERT(i_polygon.size() >= 3);
+		
+		bool is_first_product_positive = true;
+		
+		for (int i = 0; i < i_polygon.size(); ++i)
+		{
+			const QPointF& current_point = i_polygon[i];
+			
+			bool is_first_point = i == 0;
+			const QPointF& prev_point = is_first_point ? i_polygon[i_polygon.size() - 1] : i_polygon[i - 1];
+			
+			bool is_last_point = i == i_polygon.size() - 1;
+			const QPointF& next_point = is_last_point ? i_polygon[0] : i_polygon[i + 1];
+			
+			const QPointF first_vector = QPointF(current_point.x() - prev_point.x(),
+												 current_point.y() - prev_point.y());
+			
+			const QPointF second_vector = QPointF(next_point.x() - current_point.x(),
+												  next_point.y() - current_point.y());
+			
+			bool is_product_positive = (first_vector.x() * second_vector.y() - second_vector.x() * first_vector.y()) > 0;
+			if (is_first_point)
+				is_first_product_positive = is_product_positive;
+			
+			if (is_product_positive != is_first_product_positive)
+				return false;
+		}
+		
+		return true;
+	}
 }
 
 Scene::Scene(Delegate* ip_delegate)
@@ -28,21 +81,37 @@ Scene::Scene(Delegate* ip_delegate)
 
 bool Scene::IsPossibleToComplete()
 {
-	return m_points.size() >= cMinimumPolygonVertexCount;
+	return m_polygon.size() >= cMinimumPolygonVertexCount;
 }
 
 void Scene::Reset()
 {
 	clear();
 
-	m_points.clear();
+	m_polygon.clear();
 	m_lines.clear();
 	
 	mp_next_connection_line = nullptr;
 	mp_last_connection_line = nullptr;
 	
 	if (mp_delegate)
-		mp_delegate->OnPointsCountChanged(m_points.size());
+		mp_delegate->OnPointsCountChanged(m_polygon.size());
+}
+
+Scene::Result Scene::Complete()
+{
+	mp_next_connection_line->hide();
+	mp_last_connection_line->hide();
+	
+	addPolygon(m_polygon,
+			   cLineSolidBlackPen,
+			   cPolygonBrush);
+
+	Result result;
+	result.m_square = _CalculateAreaOf(m_polygon);
+	result.m_is_convex = _IsConvex(m_polygon);
+	
+	return result;
 }
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent* ip_event)
@@ -61,19 +130,19 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent* ip_event)
 	
 	if (m_lines.empty())
 	{
-		if (m_points.empty())
+		if (m_polygon.empty())
 			mp_next_connection_line = addLine(QLineF(mouse_position, mouse_position), cLineDashBlackPen);
 		else
-			mp_last_connection_line = addLine(QLineF(m_points.front(), mouse_position), cLineDashGreenPen);
+			mp_last_connection_line = addLine(QLineF(m_polygon.front(), mouse_position), cLineDashGreenPen);
 	}
 	
-	if (!m_points.empty())
-		m_lines.push_back(addLine(QLineF(m_points.back(), mouse_position), cLineSolidBlackPen));
+	if (!m_polygon.empty())
+		m_lines.push_back(addLine(QLineF(m_polygon.back(), mouse_position), cLineSolidBlackPen));
 	
-	m_points.push_back(mouse_position);
+	m_polygon.push_back(mouse_position);
 	
 	if (mp_delegate)
-		mp_delegate->OnPointsCountChanged(m_points.size());
+		mp_delegate->OnPointsCountChanged(m_polygon.size());
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *ip_event)
@@ -84,12 +153,12 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *ip_event)
 	if (!mp_next_connection_line)
 		return;
 	
-	mp_next_connection_line->setLine(QLineF(m_points.back(), ip_event->scenePos()));
+	mp_next_connection_line->setLine(QLineF(m_polygon.back(), ip_event->scenePos()));
 	
 	if (!mp_last_connection_line)
 		return;
 	
-	mp_last_connection_line->setLine(QLineF(m_points.front(), ip_event->scenePos()));
+	mp_last_connection_line->setLine(QLineF(m_polygon.front(), ip_event->scenePos()));
 	
 	if (_LinesHaveCollisions())
 	{
@@ -130,4 +199,3 @@ bool Scene::_LinesHaveCollisions()
 	
 	return false;
 }
-
