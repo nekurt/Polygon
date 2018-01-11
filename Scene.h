@@ -28,6 +28,7 @@ public:
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent* ip_event) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent* ip_event) override;
+	bool event(QEvent* ip_event) override;
 	
 	bool _LinesHaveCollisions();
 	

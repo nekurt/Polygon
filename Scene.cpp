@@ -172,6 +172,25 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *ip_event)
 	}
 }
 
+bool Scene::event(QEvent *ip_event)
+{
+	if (ip_event->type() == QEvent::Leave)
+	{
+		if (mp_next_connection_line)
+			mp_next_connection_line->setLine(QLineF(m_polygon.last(), m_polygon.last()));
+		
+		if (mp_last_connection_line)
+		{
+			mp_last_connection_line->setLine(QLineF(m_polygon.first(), m_polygon.last()));
+			mp_last_connection_line->setPen(cLineDashGreenPen);
+		}
+		
+		return true;
+	}
+	
+	return QGraphicsScene::event(ip_event);
+}
+
 bool Scene::_LinesHaveCollisions()
 {
 	if (!mp_next_connection_line || !mp_last_connection_line)
