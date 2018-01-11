@@ -6,3 +6,5 @@ To build on macOS/linux:
 1. Run ```qmake Polygon.pro``` to generate Makefile```qmake
 2. Run ```make``` to build app.
 
+To build on Windows: _not tested_
+1. Run ```qmake``` to generate Visual Studio solution.

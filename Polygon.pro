@@ -9,7 +9,14 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Polygon
+
+unix {
 TEMPLATE = app
+}
+
+win32 {
+TEMPLATE = vcapp
+}
 
 SOURCES += main.cpp \
 		   MainWindow.cpp \
